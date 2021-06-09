@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -17,7 +19,11 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
-  var listItem = ["one", "two", "three"];
+  List<Map<String, String>> items = [
+    {'title': 'タイトル1', 'message': 'メッセージ1'},
+    {'title': 'タイトル2', 'message': 'メッセージ2'},
+    {'title': 'タイトル3', 'message': 'メッセージ3'},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -30,22 +36,47 @@ class _HomeWidgetState extends State<HomeWidget> {
       ),
       body: ListView.builder(
         itemBuilder: (BuildContext context, int index) {
-          return Card(
-            child: new InkWell(
-              onTap: () {
-                print('tapped index $index');
-              },
-              child: Padding(
-                child: Text(
-                  listItem[index],
-                  style: TextStyle(fontSize: 17.0),
-                ),
-                padding: EdgeInsets.all(16.0),
-              ),
-            ),
-          );
+          return CustomCard(items[index]['title'].toString(),
+              items[index]['message'].toString());
         },
-        itemCount: listItem.length,
+        itemCount: items.length,
+      ),
+    );
+  }
+}
+
+class CustomCard extends StatefulWidget {
+  final String title;
+  final String message;
+  CustomCard(this.title, this.message);
+
+  @override
+  _CustomCardState createState() => _CustomCardState();
+}
+
+class _CustomCardState extends State<CustomCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: new InkWell(
+        onTap: () {
+          print('タップ');
+        },
+        child: Padding(
+          child: Column(
+            children: <Widget>[
+              Text(
+                widget.title,
+                style: TextStyle(fontSize: 17.0, color: Colors.green),
+              ),
+              Text(
+                widget.message,
+                style: TextStyle(fontSize: 14.0),
+              ),
+            ],
+          ),
+          padding: EdgeInsets.all(16.0),
+        ),
       ),
     );
   }
